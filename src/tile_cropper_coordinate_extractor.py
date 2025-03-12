@@ -232,53 +232,53 @@ class NDPIFileCropper:
                 xy = (x, y)
                 start_xy_list.append(xy)
                 
-        # xy_dicts = [{'x': coord[0], 'y': coord[1]} for coord in start_xy_list]
-        # with open(f"/projects/dsci435/smithsonian_sp25/data/annotation_region_tile_coordinates/{os.path.basename(self.input_file_path)}_tile_coordindates.json", 'w') as file:
-        #     json.dump(xy_dicts, file)
+        xy_dicts = [{'x': coord[0], 'y': coord[1]} for coord in start_xy_list]
+        with open(f"/projects/dsci435/smithsonian_sp25/data/annotation_region_tile_coordinates/{os.path.basename(self.input_file_path)}_tile_coordindates.json", 'w') as file:
+            json.dump(xy_dicts, file)
         
-        # return
+        return
         """
         uncomment rest of function after getting the annotated region tile coordinates
         """
 
-        logger.info(self.input_filename + ": Number of tiles: " + str(len(start_xy_list)))
-        self.total_tile_count = len(start_xy_list)
+        # logger.info(self.input_filename + ": Number of tiles: " + str(len(start_xy_list)))
+        # self.total_tile_count = len(start_xy_list)
 
-        crops_dir_metadata_dict = dict()
-        crops_dir_metadata_dict['tile_size'] = self.tile_size
-        crops_dir_metadata_dict['tile_overlap'] = self.tile_overlap
-        crops_dir_metadata_dict['ome_metadata'] = self.metadata
-        crops_dir_metadata_dict['total_tile_count'] = self.total_tile_count
-        crops_dir_metadata_dict['processed_tile_count'] = 0
-        crops_dir_metadata_dict['percent_complete'] = 0.0
+        # crops_dir_metadata_dict = dict()
+        # crops_dir_metadata_dict['tile_size'] = self.tile_size
+        # crops_dir_metadata_dict['tile_overlap'] = self.tile_overlap
+        # crops_dir_metadata_dict['ome_metadata'] = self.metadata
+        # crops_dir_metadata_dict['total_tile_count'] = self.total_tile_count
+        # crops_dir_metadata_dict['processed_tile_count'] = 0
+        # crops_dir_metadata_dict['percent_complete'] = 0.0
 
-        crops_dir_metadata_file_path = os.path.join(crops_dir, 'metadata.json')
+        # crops_dir_metadata_file_path = os.path.join(crops_dir, 'metadata.json')
 
-        # Write metadata to the crops directory if it does not exist
-        if not os.path.exists(crops_dir_metadata_file_path):
-            with open(crops_dir_metadata_file_path, 'w') as f:
-                json.dump(crops_dir_metadata_dict, f, indent=4)
+        # # Write metadata to the crops directory if it does not exist
+        # if not os.path.exists(crops_dir_metadata_file_path):
+        #     with open(crops_dir_metadata_file_path, 'w') as f:
+        #         json.dump(crops_dir_metadata_dict, f, indent=4)
 
-        for i in range(len(start_xy_list)):
-            start_x = start_xy_list[i][0]
-            start_y = start_xy_list[i][1]
-            tile_dir = os.path.join(str(crops_dir), str(start_x) + 'x_' + str(start_y) + 'y')
-            if not os.path.exists(tile_dir):
-                os.makedirs(tile_dir)
+        # for i in range(len(start_xy_list)):
+        #     start_x = start_xy_list[i][0]
+        #     start_y = start_xy_list[i][1]
+        #     tile_dir = os.path.join(str(crops_dir), str(start_x) + 'x_' + str(start_y) + 'y')
+        #     if not os.path.exists(tile_dir):
+        #         os.makedirs(tile_dir)
 
-            z_plane_image_count = self.__count_files(tile_dir, self.tile_format)
-            # Proceed only if the number of z-plane images is less than the number of z-planes in the image or if the
-            # overwrite flag is set
-            if z_plane_image_count < self.metadata['z_plane'] or self.overwrite_flag:
-                for j in range(self.metadata['z_plane']):
-                    img = self.__read_tile(x=start_x, y=start_y, z=j, width=width, height=height)
-                    if img is not None:
-                        im = Image.fromarray(img)
-                        im.save(os.path.join(tile_dir, str(j) + 'z.png'))
-            else:
-                logger.info(self.input_filename + ": Tile " + str(i) + " already exists. Skipping...")
-            self.processed_tile_count += 1
-            logger.info(self.input_filename + ": Tile " + str(i) + " complete.")
+        #     z_plane_image_count = self.__count_files(tile_dir, self.tile_format)
+        #     # Proceed only if the number of z-plane images is less than the number of z-planes in the image or if the
+        #     # overwrite flag is set
+        #     if z_plane_image_count < self.metadata['z_plane'] or self.overwrite_flag:
+        #         for j in range(self.metadata['z_plane']):
+        #             img = self.__read_tile(x=start_x, y=start_y, z=j, width=width, height=height)
+        #             if img is not None:
+        #                 im = Image.fromarray(img)
+        #                 im.save(os.path.join(tile_dir, str(j) + 'z.png'))
+        #     else:
+        #         logger.info(self.input_filename + ": Tile " + str(i) + " already exists. Skipping...")
+        #     self.processed_tile_count += 1
+        #     logger.info(self.input_filename + ": Tile " + str(i) + " complete.")
 
     def write_metadata_before_exiting(self):
         crops_dir = str(os.path.join(self.output_dir, os.path.basename(self.input_file_path).split(' ')[0].rsplit('.', maxsplit=1)[0]))
@@ -407,12 +407,12 @@ if __name__ == '__main__':
         """
         uncomment below after getting annotated region tile coordinates
         """
-        # Write metadata before exiting
-        ndpi_file_cropper.write_metadata_before_exiting()
+        # # Write metadata before exiting
+        # ndpi_file_cropper.write_metadata_before_exiting()
 
-        # Zip the tiles directory if the zip flag is set
-        if cli.args.zip:
-            ndpi_file_cropper.zip_tiles()
+        # # Zip the tiles directory if the zip flag is set
+        # if cli.args.zip:
+        #     ndpi_file_cropper.zip_tiles()
 
     except Exception as e:
         logger.info("Exception in NDPITileCropper CLI")
@@ -422,7 +422,7 @@ if __name__ == '__main__':
         """
         uncomment below after receiving annotated region tile coordinates
         """
-        ndpi_file_cropper.write_metadata_before_exiting()
+        # ndpi_file_cropper.write_metadata_before_exiting()
 
         # Stop the JVM
         logger.info("Shutting down JVM.")
